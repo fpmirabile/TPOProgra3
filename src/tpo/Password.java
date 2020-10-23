@@ -53,7 +53,7 @@ public class Password {
 			if (isValidPassword(nextPassword, passwordLength)) {
 				generate(x + 1, nextPassword, passwordLength);
 			} else {
-				return;
+				nextPassword = nextPassword.substring(0, nextPassword.length() - 1);
 			}
 		}
 	}

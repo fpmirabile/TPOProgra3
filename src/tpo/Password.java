@@ -20,40 +20,18 @@ public class Password {
 	final Character[] DIGITS = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
 	final Character[] SPECIAL_CHARACTERS = { '+', '-', '*', '/', '%', '&' };
 
+	Character[] totalGroup;
+
 	public Password() {
 		UPPER_CASE_LETTERS = new Character[LOWER_CASE_LETTERS.length];
 		for (int i = 0; i < LOWER_CASE_LETTERS.length; i++) {
 			UPPER_CASE_LETTERS[i] = Character.toUpperCase(LOWER_CASE_LETTERS[i]);
 		}
-	}
-	
-	/**
-	 * Generates all the possible passwords Since we need to validate at least: - 1
-	 * upper and lower case letter - 1 digit - a special character The password
-	 * length can't be lower than 3
-	 */
-	public void generate(int passwordLength) {
+
 		// How to merge multiples arrays
 		// Taken from https://www.techiedelight.com/merge-multiple-arrays-java/
-		Character[] totalGroup = Stream.of(LOWER_CASE_LETTERS, UPPER_CASE_LETTERS, DIGITS, SPECIAL_CHARACTERS)
-				.flatMap(Stream::of).toArray(Character[]::new);
-
-		Random rnd = new Random();
-		for (int i = 0; i < totalGroup.length; i++) {
-			int numberOfCharacters = 1;
-			String nextPassword = "" + totalGroup[i];
-			while (numberOfCharacters < passwordLength) {
-				// No entiendo bien como recorrer esto
-				nextPassword += totalGroup[rnd.nextInt(totalGroup.length - 1)];
-				numberOfCharacters++;
-				while (!isValidPassword(nextPassword, passwordLength)) {
-					nextPassword = nextPassword.substring(0, nextPassword.length() - 1);
-					numberOfCharacters--;
-				}
-			}
-			
-			System.out.println(nextPassword);
-		}
+		totalGroup = Stream.of(LOWER_CASE_LETTERS, UPPER_CASE_LETTERS, DIGITS, SPECIAL_CHARACTERS).flatMap(Stream::of)
+				.toArray(Character[]::new);
 	}
 
 	/**
@@ -62,29 +40,29 @@ public class Password {
 	 * length can't be lower than 3
 	 */
 	public void generate(int i, String createdPassword, int passwordLength) {
-		// How to merge multiples arrays
-		// Taken from https://www.techiedelight.com/merge-multiple-arrays-java/
-		Character[] totalGroup = Stream.of(LOWER_CASE_LETTERS, UPPER_CASE_LETTERS, DIGITS, SPECIAL_CHARACTERS)
-				.flatMap(Stream::of).toArray(Character[]::new);
-
-		
-		// iterate through the array on each character
-		for (int j = 0; j < totalGroup.length; j++) {
-			char currentChar = totalGroup[j];			
-			String nextPassword = createdPassword + totalGroup[j];
-	
-			while (!isValidPassword(createdPassword, passwordLength)) {
-				
-			}
+		// Base case
+		if (createdPassword.length() == passwordLength) {
+			System.out.println(createdPassword);
+			return;
 		}
 
-//		return;
+		// iterate through the array on each character
+		for (int x = i; x < totalGroup.length; x++) {			
+			char currentChar = totalGroup[x];
+			String nextPassword = createdPassword + currentChar;
+			if (isValidPassword(nextPassword, passwordLength)) {
+				generate(x + 1, nextPassword, passwordLength);
+			} else {
+				return;
+			}
+		}
 	}
 
 	public void crack(int passwordLength) {
 		// call for all required lengths
-		for (int i = 1; i <= passwordLength; i++) {
-			generate(i, "", passwordLength);
+		for (int i = 0; i < totalGroup.length; i++) {
+			String password = "" + totalGroup[i];
+			generate(0, password, passwordLength);
 		}
 	}
 

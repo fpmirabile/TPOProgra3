@@ -8,7 +8,6 @@ public class Main {
 	public static void main(String[] args) {
 		int len = 6;
 		Password pass = new Password();
-//		pass.crack(len);
-		pass.generate(len);
+		pass.crack(len);
 	}
 }

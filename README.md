@@ -7,4 +7,4 @@ The passwords requirements needs to fit 1 lower, upper, digit and special charac
 
 # Status
 
-This is a work in progress.
+This work is done.

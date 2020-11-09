@@ -8,7 +8,7 @@ import java.util.stream.Stream;
  *
  */
 public class Password {
-	// Can´t have less than 4 characters because of the rules 
+	// Canï¿½t have less than 4 characters because of the rules 
 	private final int MIN_CHARACTER_AMOUNT = 4;
 	
 	final Character[] LOWER_CASE_LETTERS = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
@@ -66,7 +66,7 @@ public class Password {
 				// Recursive complexity (I guess is substraction) then
 				// a = 1, b = 1, k = n
 				// O(n^k+1)= O(n^2)
-				generate(x + 1, nextPassword, passwordLength);
+				generate(x, nextPassword, passwordLength);
 			} else {
 				if (enableDebugging) {
 					System.out.println("Password parcial no valida: " + nextPassword);
@@ -103,14 +103,17 @@ public class Password {
 			int lowerChars = searchCharacterInString(password, LOWER_CASE_LETTERS); // O(N) where N is the alphabetical lower case (26)
 			int specialChars = searchCharacterInString(password, SPECIAL_CHARACTERS); // O(N) where N is the symbol amount (6)
 			if (randomValuesAllowed > 0) {
-				if (upperChars > randomValuesAllowed || digitsChar > randomValuesAllowed || lowerChars > randomValuesAllowed
-						|| specialChars > randomValuesAllowed) {
+				if (upperChars > randomValuesAllowed || digitsChar > randomValuesAllowed || lowerChars > randomValuesAllowed) {
 					return false;
 				}
 			}
 	
 			if (password.length() == passwordLength) {
 				if (upperChars == 0 || digitsChar == 0 || lowerChars == 0 || specialChars == 0) {
+					return false;
+				}
+
+				if (specialChars > 1) {
 					return false;
 				}
 			}
